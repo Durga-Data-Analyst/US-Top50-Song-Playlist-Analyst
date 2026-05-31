@@ -51,13 +51,47 @@ with tab1:
   st.metric("Artists",filtered["artist"].nunique())
   st.metric("Avg Popularity",round(filtered["popularity"].mean(),2))
 
-with tab2:
-  chart=filtered.groupby("date")["position"].mean()
 
-  fig,ax=plt.subplots()
-  ax.plot(chart.index,chart.values)
-  ax.set_title("Daily Average Rank")
+with tab2:
+  st.subheader("Playlist Timeline Explorer")
+
+  selected_song = st.selectbox(
+  "Select Song",
+  sorted(filtered["song"].unique())
+  )
+  
+  song_df = (
+  filtered[
+  filtered["song"] == selected_song
+  ]
+  .sort_values("date")
+  )
+  
+  fig, ax = plt.subplots(figsize=(12,6))
+  
+  ax.plot(
+  song_df["date"],
+  song_df["position"],
+  marker="o"
+  )
+  
+  ax.invert_yaxis()
+  
+  ax.set_title(
+  f"Ranking Trend - {selected_song}"
+  )
+
+  ax.set_xlabel("Date")
+  ax.set_ylabel("Playlist Rank")
+
+  plt.xticks(rotation=45)
+
   st.pyplot(fig)
+
+  st.dataframe(
+  song_df[
+  [
+  "date","position","popularity","artist"]])
 
 with tab3:
   top=metrics.sort_values(
