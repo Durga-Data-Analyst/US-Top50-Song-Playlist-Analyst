@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="US Top50 Music Analytics",layout="wide")
 
-df=pd.read_csv("featured_playlist.csv")
+df=pd.read_csv("top50_playlist.csv")
 metrics=pd.read_csv("song_metrics.csv")
 
 df["date"]=pd.to_datetime(df["date"])
